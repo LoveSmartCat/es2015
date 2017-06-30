@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title>Title</title>
+</head>
+<body>
+   <script>//es6 之前只有全局作用域和函数作用域
+       {
+           let a= '苹果';//let 只能作用于块作用域 不存在变量提升
+       }
+       //console.log(a);
+
+       for (let i = 0; i < 3; i++) {//输入三次abc ，说明for 里面的i 和循环体内i不是同一个作用域
+           let i = 'abc';
+           //console.log(i);
+       }
+       const  fruit = [];//const  是设置这个量为常量，设置是这个动作，而不是值
+       fruit.push('苹果');
+       fruit.push('柠檬');
+       //console.log(fruit);
+
+        var a =1 ;
+        //console.log(window.a);
+
+        let b =1;
+       // console.log(window.b);
+
+        //import  getGlobal from  'system.global';
+        //const global = getGlobal();
+
+//        function  breakfest() {
+//            return ['苹果','香蕉','梨'];
+//        }
+//
+//        let[apple,banana,drik] = breakfest();
+//        console.log(apple,banana,drik);
+
+     /*   let apple = '苹果',
+    banana = '栗子';
+
+    let breakfest = `今天的早餐是 ${apple} 与 ${banana}!`;
+    console.log(breakfest);*/
+        let obj = {frist:'hello',last:'world'};
+        let {frist:f,last:l,s} = obj;
+        console.log(f,l,s);
+
+        var map = new Map();
+        map.set('frist','hello');
+        map.set('last','world');
+
+        for(let [key,value] of map){
+            console.log(key+'--->'+value);
+        }
+       for(let [,value] of map){
+           console.log('--->'+value);
+       }
+
+
+   </script>
+
+</body>
+</html>
