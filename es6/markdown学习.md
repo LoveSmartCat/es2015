@@ -5,8 +5,11 @@ This is an H1
 This is an H2
 -------------
 类 Atx 形式则是在行首插入 1 到 6 个 # ，对应到标题 1 到 6 阶
+
 # 这是h1
+
 ##这是h2
+
 ######这是h6
 
 #区块引用 Blockquotes
@@ -19,6 +22,7 @@ Markdown 标记区块引用是使用类似 email 中用 > 的引用方式。
 >> consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus.
 >Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
 > 
+
 Markdown 也允许你偷懒只在整个段落的第一行最前面加上 > 
 > This is a blockquote with two paragraphs. Lorem ipsum dolor sit amet,
 consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus.
@@ -55,10 +59,13 @@ viverra nec, fringilla in, laoreet vitae, risus.
 Suspendisse id sem consectetuer libero luctus adipiscing.
 
 ######列表项目可以包含多个段落，每个项目下的段落都必须缩进 4 个空格或是 1 个制表符：
+
 ######如果要在列表项目内放进引用，那 > 就需要缩进
+
 ######如果要放代码区块的话，该区块就需要缩进两次，也就是 8 个空格或是 2 个制表符：
 
 #代码区块
+
 ######要在 Markdown 中建立代码区块很简单，只要简单地缩进 4 个空格或是 1 个制表符就可以
 这是一个普通段落：
     
@@ -71,6 +78,7 @@ Here is an example of Application:
     end tell
 
 #分隔线
+
 你可以在一行中用三个以上的星号、减号、底线来建立一个分隔线，行内不能有其他东西。你也可以在星号或是减号中间插入空格。下面每种写法都可以建立分隔线：
 
 ***
@@ -80,7 +88,9 @@ Here is an example of Application:
 --------------
 
 #区段元素
+
 ##链接
+
 Markdown 支持两种形式的链接语法： 行内式和参考式两种形式。
 
 不管是哪一种，链接文字都是用 [方括号] 来标记。
@@ -115,6 +125,7 @@ This is [an example][id] reference-style link.
 [Google]: http://google.com/
 
 ##强调
+
 Markdown 使用星号（*）和底线（_）作为标记强调字词的符号，被 * 或 _ 包围的字词会被转成用 `<em>` 标签包围，用两个 * 或 _ 包起来的话，则会被转成`<strong>`
 
 你用什么符号开启标签，就要用什么符号结束。
