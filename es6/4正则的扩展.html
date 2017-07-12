@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>4正则的扩展</title>
+    <script>
+        //1.RegExp 构造函数
+        /**
+         * 如果RegExp构造函数第一个参数是一个正则对象，那么可以使用第二个参数指定修饰符。
+         * 而且，返回的正则表达式会忽略原有的正则表达式的修饰符，只使用新指定的修饰符。
+         */
+        //console.log(new RegExp(/abc/ig,'i').flags);
+        //2.字符串的正则方法
+        /**
+         * 字符串对象共有4个方法，可以使用正则表达式：match()、replace()、search()和split()。
+         * ES6 将这4个方法，在语言内部全部调用RegExp的实例方法，从而做到所有与正则相关的方法，全都定义在RegExp对象上。
+         * String.prototype.match 调用 RegExp.prototype[Symbol.match]
+         * String.prototype.replace 调用 RegExp.prototype[Symbol.replace]
+         * String.prototype.search 调用 RegExp.prototype[Symbol.search]
+         * String.prototype.split 调用 RegExp.prototype[Symbol.split]
+         */
+        //3.u修饰符
+        /**
+         * ES6 对正则表达式添加了u修饰符，含义为“Unicode模式”，用来正确处理大于\uFFFF的 Unicode 字符。也就是说，会正确处理四个字节的 UTF-16 编码。
+         * 一旦加上u修饰符号，就会修改下面这些正则表达式的行为。
+         （1）点字符
+         点（.）字符在正则表达式中，含义是除了换行符以外的任意单个字符。对于码点大于0xFFFF的 Unicode 字符，点字符不能识别，必须加上u修饰符。
+         （2）Unicode 字符表示法
+         ES6 新增了使用大括号表示 Unicode 字符，这种表示法在正则表达式中必须加上u修饰符，才能识别当中的大括号，否则会被解读为量词。
+         （3）量词
+         使用u修饰符后，所有量词都会正确识别码点大于0xFFFF的 Unicode 字符。
+         （4）预定义模式
+         u修饰符也影响到预定义模式，能否正确识别码点大于0xFFFF的 Unicode 字符
+         （5）i 修饰符
+         有些 Unicode 字符的编码不同，但是字型很相近，比如，\u004B与\u212A都是大写的K。
+         /[a-z]/i.test('\u212A') // false
+         /[a-z]/iu.test('\u212A') // true
+         上面代码中，不加u修饰符，就无法识别非规范的K字符。
+         */
+        //4.y修饰符
+        /**
+         * 除了u修饰符，ES6 还为正则表达式添加了y修饰符，叫做“粘连”（sticky）修饰符。
+         * y修饰符的作用与g修饰符类似，也是全局匹配，后一次匹配都从上一次匹配成功的下一个位置开始。不同之处在于，g修饰符只要剩余位置中存在匹配就可，
+         * 而y修饰符确保匹配必须从剩余的第一个位置开始，这也就是“粘连”的涵义。
+         */
+        //5.sticky 属性
+        /**
+         * 与y修饰符相匹配，ES6 的正则对象多了sticky属性，表示是否设置了y修饰符。
+         */
+        //6.flags属性
+        /**
+         *ES6 为正则表达式新增了flags属性，会返回正则表达式的修饰符。
+         * ES5的 source 属性,返回正则表达式的正文
+         */
+        /abc/ig.source;
+        /abc/ig.flags;
+        //7. s修饰符：dotAll模式
+        /**
+         *  引入/s修饰符，使得.可以匹配任意单个字符。
+         *  /foo.bar/s.test('foo\nbar')
+         *  称为dotAll模式，即点（dot）代表一切字符。所以，正则表达式还引入了一个dotAll属性，
+         *  返回一个布尔值，表示该正则表达式是否处在dotAll模式。
+         *  /s修饰符和多行修饰符/m不冲突，两者一起使用的情况下，.匹配所有字符，而^和$匹配每一行的行首和行尾。
+         */
+        //8. 后行断言
+        /**
+         * ”先行断言“指的是，x只有在y前面才匹配，必须写成/x(?=y)/。
+         * 比如，只匹配百分号之前的数字，要写成/\d+(?=%)/。”先行否定断言“指的是，x只有不在y前面才匹配，必须写成/x(?!y)/。
+         *
+         * “后行断言”正好与“先行断言”相反，x只有在y后面才匹配，必须写成/(?<=y)x/。
+         *  比如，只匹配美元符号之后的数字，要写成/(?<=\$)\d+/。”后行否定断言“则与”先行否定断言“相反，x只有不在y后面才匹配，必须写成/(?<!y)x/。
+         *
+         *  “后行断言”的实现，需要先匹配/(?<=y)x/的x，然后再回到左边，匹配y的部分。这种“先右后左”的执行顺序，与所有其他正则操作相反，导致了一些不符合预期的行为。
+         *  因为后行断言是先从左到右扫描，发现匹配以后再回过头，从右到左完成反斜杠引用。
+         */
+        //9.Unicode 属性类
+        /**
+         * 引入了一种新的类的写法\p{...}和\P{...}，允许正则表达式匹配符合 Unicode 某种属性的所有字符。
+         *  const regexGreekSymbol = /\p{Script=Greek}/u;
+         *  regexGreekSymbol.test('π') // true
+         *  Unicode 属性类要指定属性名和属性值。
+         * \p{UnicodePropertyName=UnicodePropertyValue}
+         * 对于某些属性，可以只写属性名。
+         * \p{UnicodePropertyName}
+         * \P{…}是\p{…}的反向匹配，即匹配不满足条件的字符。
+         * 注意，这两种类只对 Unicode 有效，所以使用的时候一定要加上u修饰符。
+         * 如果不加u修饰符，正则表达式使用\p和\P会报错，ECMAScript 预留了这两个类。
+         */
+        //10.具名组匹配
+        /**
+         * 正则表达式使用圆括号进行组匹配。
+         * const RE_DATE = /(\d{4})-(\d{2})-(\d{2})/;使用exec方法，就可以将这三组匹配结果提取出来。
+         * 组匹配的一个问题是，每一组的匹配含义不容易看出来，而且只能用数字序号引用，要是组的顺序变了，引用的时候就必须修改序号。
+         * “具名组匹配”在圆括号内部，模式的头部添加“问号 + 尖括号 + 组名”（?<year>），然后就可以在exec方法返回结果的groups属性上引用该组名。
+         * 同时，数字序号（matchObj[1]）依然有效。
+         * 如果具名组没有匹配，那么对应的groups对象属性会是undefined。
+         */
+//        const RE_OPT_A = /^(?<as>a+)?$/;
+//        //const matchObj = RE_OPT_A.exec('');
+//        //console.log(matchObj.groups.as);
+//        const RE_DATE = /(?<year>\d{4})-(?<month>\d{2})-(?<day>\d{2})/;
+//
+//        const matchObj =RE_DATE.exec('1999-12-31');
+//        const  year = matchObj.groups.year;
+//        const  month = matchObj.groups.month;
+//        const  day = matchObj.groups.day;
+//        console.log(year,month,day);
+
+        //解构赋值和替换
+        /**
+         * 有了具名组匹配以后，可以使用解构赋值直接从匹配结果上为变量赋值。
+
+         let {groups: {one, two}} = /^(?<one>.*):(?<two>.*)$/u.exec('foo:bar');
+         one  // foo
+         two  // bar
+         字符串替换时，使用$<组名>引用具名组。
+
+         let re = /(?<year>\d{4})-(?<month>\d{2})-(?<day>\d{2})/u;
+
+         '2015-01-02'.replace(re, '$<day>/$<month>/$<year>')
+         // '02/01/2015'
+         上面代码中，replace方法的第二个参数是一个字符串，而不是正则表达式。
+
+         replace方法的第二个参数也可以是函数，
+         */
+        /**
+         * 引用
+             如果要在正则表达式内部引用某个“具名组匹配”，可以使用\k<组名>的写法。
+
+             const RE_TWICE = /^(?<word>[a-z]+)!\k<word>$/;
+             RE_TWICE.test('abc!abc') // true
+             RE_TWICE.test('abc!ab') // false
+             数字引用（\1）依然有效。
+
+             const RE_TWICE = /^(?<word>[a-z]+)!\1$/;
+             RE_TWICE.test('abc!abc') // true
+             RE_TWICE.test('abc!ab') // false
+             这两种引用语法还可以同时使用。
+
+             const RE_TWICE = /^(?<word>[a-z]+)!\k<word>!\1$/;
+             RE_TWICE.test('abc!abc!abc') // true
+             RE_TWICE.test('abc!abc!ab') // false
+         */
+
+
+    </script>
+
+
+
+</head>
+<body>
+
+</body>
+</html>
